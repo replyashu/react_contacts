@@ -1,6 +1,5 @@
 /**
  * Sample React Native App
- * https://github.com/facebook/react-native
  *
  * @format
  * @flow
@@ -20,7 +19,7 @@ import {
   ActivityIndicator
 } from "react-native";
 import Contacts from "react-native-contacts";
-
+import {Linking} from 'react-native'
 import ListItem from "./components/ListItem";
 import Avatar from "./components/Avatar";
 import SearchBar from "./components/SearchBar";
@@ -39,10 +38,6 @@ export default class App extends Component<Props> {
       loading:true
     };
 
-    // if you want to read/write the contact note field on iOS, this method has to be called
-    // WARNING: by enabling notes on iOS, a valid entitlement file containing the note entitlement as well as a separate
-    //          permission has to be granted in order to release your app to the AppStore. Please check the README.md
-    //          for further information.
     Contacts.iosEnableNotesUsage(true);
   }
 
@@ -96,6 +91,8 @@ export default class App extends Component<Props> {
   onPressContact(contact){
     var text = this.state.typeText;
     this.setState({typeText:null});
+    let phoneNumber = contact.number;
+
     if(text === null || text === '')
       Contacts.openExistingContact(contact, () => { })
     else{
@@ -103,10 +100,7 @@ export default class App extends Component<Props> {
         recordID: contact.recordID,
         phoneNumbers: [{ label: 'mobile', number: text}]
       }
-      Contacts.editExistingContact(newPerson, (err, contact) => {       
-        if (err) throw err;
-        //contact updated        
-      });
+      
     }
   }
 
@@ -121,24 +115,18 @@ export default class App extends Component<Props> {
             alignItems: "center"
           }}
         >
-          <Image
-            source={require("./logo.png")}
-            style={{
-              aspectRatio: 6,
-              resizeMode: "contain"
-            }}
-          />
         </View>
         <SearchBar
           searchPlaceholder={this.state.searchPlaceholder}
           onChangeText={this.search}
         />
 
-        <View style={{paddingLeft:10,paddingRight:10}}>
+        <View style={{paddingLeft:10,paddingRight:10, marginBottom:'5%'}}>
           <TextInput
             keyboardType='number-pad'
             style={styles.inputStyle}
             placeholder='Enter number to add to contact'
+
             onChangeText={text => this.setState({typeText:text})}
             value={this.state.typeText}
           />
@@ -151,10 +139,11 @@ export default class App extends Component<Props> {
               <ActivityIndicator size="large" color="#0000ff" />
             </View>
           ):(
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1}}>
               {this.state.contacts.map(contact => {
                 return (
-                  <ListItem
+                  <ListItem 
+
                     leftElement={
                       <Avatar
                         img={
@@ -172,9 +161,10 @@ export default class App extends Component<Props> {
                     key={contact.recordID}
                     title={`${contact.givenName} ${contact.familyName}`}
                     description={`${contact.company}`}
+
                     onPress={() => this.onPressContact(contact)}
                     onDelete={() =>
-                      Contacts.deleteContact(contact, () => {
+                      this.deleteContact(contact, () => {
                         this.loadContacts();
                       })
                     }
@@ -192,7 +182,7 @@ export default class App extends Component<Props> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   spinner:{
     flex:1,
@@ -202,7 +192,7 @@ const styles = StyleSheet.create({
   },
   inputStyle:{ 
     height: 40, 
-    borderColor: 'gray', 
+    borderColor: 'green', 
     borderWidth: 1, 
     textAlign:"center" 
   }

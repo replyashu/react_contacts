@@ -74,6 +74,7 @@ class ListItem extends Component {
       title,
       description,
       rightElement,
+      message,
       rightText,
       onPress,
       onLongPress,
@@ -106,6 +107,7 @@ class ListItem extends Component {
           underlayColor="#f2f3f5"
         >
           <View style={itemContainer}>
+          
             {leftElement ? (
               <View style={leftElementContainer}>{leftElement}</View>
             ) : (
@@ -141,6 +143,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: "row",
     minHeight: 44,
+    backgroundColor: 'gray',
     height: 63
   },
   leftElementContainer: {
@@ -171,7 +174,8 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   titleStyle: {
-    fontSize: 16
+    fontSize: 18,
+    color:'white'
   },
   descriptionStyle: {
     fontSize: 14,

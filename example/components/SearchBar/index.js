@@ -113,7 +113,7 @@ class SearchBar extends Component {
       <TouchableWithoutFeedback onPress={this.focus} style={style}>
         <Animated.View style={container}>
           <View style={leftIconStyle}>
-            <Text>🔍</Text>
+            <Text></Text>
           </View>
           <TextInput
             onFocus={this.onFocus}
